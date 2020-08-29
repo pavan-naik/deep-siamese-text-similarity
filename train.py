@@ -198,9 +198,11 @@ with tf.Graph().as_default():
             }
         _, step, loss, accuracy, dist, sim, summaries = sess.run([tr_op_set, global_step, siameseModel.loss, siameseModel.accuracy, siameseModel.distance, siameseModel.temp_sim, train_summary_op],  feed_dict)
         time_str = datetime.datetime.now().isoformat()
-        print("TRAIN {}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
+        #print("TRAIN {}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
+        
         train_summary_writer.add_summary(summaries, step)
-        print(y_batch, dist, sim)
+        #print(y_batch, dist, sim)
+        return loss, accuracy
 
     def dev_step(x1_batch, x2_batch, y_batch):
         """
@@ -222,9 +224,9 @@ with tf.Graph().as_default():
             }
         step, loss, accuracy, sim, summaries = sess.run([global_step, siameseModel.loss, siameseModel.accuracy, siameseModel.temp_sim, dev_summary_op],  feed_dict)
         time_str = datetime.datetime.now().isoformat()
-        print("DEV {}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
+        #print("DEV {}: step {}, loss {:g}, acc {:g}".format(time_str, step, loss, accuracy))
         dev_summary_writer.add_summary(summaries, step)
-        print (y_batch, sim)
+        #print (y_batch, sim)
         return accuracy
 
     # Generate batches
@@ -233,14 +235,23 @@ with tf.Graph().as_default():
 
     ptr=0
     max_validation_acc=0.0
-    for nn in xrange(sum_no_of_batches*FLAGS.num_epochs):
-        batch = batches.next()
+    for nn in range(sum_no_of_batches*FLAGS.num_epochs):
+        
+        
+        batch = next(batches)
         if len(batch)<1:
             continue
         x1_batch,x2_batch, y_batch = zip(*batch)
         if len(y_batch)<1:
             continue
-        train_step(x1_batch, x2_batch, y_batch)
+        loss, accuracy = train_step(x1_batch, x2_batch, y_batch)
+        
+        if (nn % sum_no_of_batches) == 0:
+            print(f"epoch: {nn/sum_no_of_batches}/{FLAGS.num_epochs}")
+            print(f"loss: {loss},    accuracy:{accuracy}")
+        
+        
+        
         current_step = tf.train.global_step(sess, global_step)
         sum_acc=0.0
         if current_step % FLAGS.evaluate_every == 0:
