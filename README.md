@@ -71,6 +71,7 @@ Categories of pairs, it can learn as similar:
 - tensorflow 1.2.1
 - gensim 1.0.1
 - nltk 3.2.2
+- tensorflow-gpu 1.15
 
 # How to run
 ### Training
