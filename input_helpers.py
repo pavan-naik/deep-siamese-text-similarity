@@ -10,7 +10,6 @@ from collections import Counter
 from tensorflow.contrib import learn
 from gensim.models.word2vec import Word2Vec
 from preprocess import MyVocabularyProcessor
-sys.setdefaultencoding("utf-8")
 
 class InputHelper(object):
     pre_emb = dict()
