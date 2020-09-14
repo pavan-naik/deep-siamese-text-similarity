@@ -92,7 +92,7 @@ class InputHelper(object):
             else:
                x1.append(l[1].lower())
                x2.append(l[0].lower())
-            y.append(float(l[2]))
+            y.append(int(l[2]))
   
         # -----------------random negative sample creation -------------
         # generate random negative samples
