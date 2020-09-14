@@ -92,17 +92,17 @@ class InputHelper(object):
             else:
                x1.append(l[1].lower())
                x2.append(l[0].lower())
-            y.append(int(l[2]))
+            y.append(float(l[2]))
   
         # -----------------random negative sample creation -------------
         # generate random negative samples
-#         combined = np.asarray(x1+x2)
-#         shuffle_indices = np.random.permutation(np.arange(len(combined)))
-#         combined_shuff = combined[shuffle_indices]
-#         for i in range(len(combined)):
-#             x1.append(combined[i])
-#             x2.append(combined_shuff[i])
-#             y.append(0) #np.array([1,0]))
+        combined = np.asarray(x1+x2)
+        shuffle_indices = np.random.permutation(np.arange(len(combined)))
+        combined_shuff = combined[shuffle_indices]
+        for i in range(len(combined)):
+            x1.append(combined[i])
+            x2.append(combined_shuff[i])
+            y.append(0) #np.array([1,0]))
         # -----------------random negative sample creation -------------
         return np.asarray(x1),np.asarray(x2),np.asarray(y)
 
