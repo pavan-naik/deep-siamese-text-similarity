@@ -255,7 +255,6 @@ with tf.Graph().as_default():
         current_step = tf.train.global_step(sess, global_step)
         sum_acc=0.0
         if current_step % FLAGS.evaluate_every == 0:
-            print("\nEvaluation:")
             dev_batches = inpH.batch_iter(list(zip(dev_set[0],dev_set[1],dev_set[2])), FLAGS.batch_size, 1)
             for db in dev_batches:
                 if len(db)<1:
@@ -265,7 +264,7 @@ with tf.Graph().as_default():
                     continue
                 acc = dev_step(x1_dev_b, x2_dev_b, y_dev_b)
                 sum_acc = sum_acc + acc
-            print("")
+            print(f"dev accuracy: {sum_acc/len(dev_batches)}")
         if current_step % FLAGS.checkpoint_every == 0:
             if sum_acc >= max_validation_acc:
                 max_validation_acc = sum_acc
